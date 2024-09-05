@@ -14,3 +14,7 @@ Then go to the url provided in the last output of the command
 (e.g. `http://127.0.0.1:8080/lab?token=ba2ae728b9007cea2305540b8680fb492966f9f5de1dc5b4`).
 (e.g. `http://127.0.0.1:8080/lab?token=ba2ae728b9007cea2305540b8680fb492966f9f5de1dc5b4`).
 All the python files will be created in the `src/` folder.
+
+## LICENSE
+
+No license is provided because certain files come from the course and I only have the right to use them. 
