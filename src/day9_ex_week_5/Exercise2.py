@@ -84,53 +84,53 @@ def compute_transformation(source, target, threshold, trans_init,
         point_to_plane)
 
     print(icp_result.transformation)
-    # draw_registrations(source, target, icp_result.transformation)
     if showicp:
         draw_registrations(source, target, icp_result.transformation, True)
 
     return icp_result
 
 
-threshold = .02
-
-# Exercise A
-if False:
-    I = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]]
+if __name__ == '__main__':
     threshold = .02
-    compute_transformation(load_pcd("000000"), load_pcd("000005"), threshold, I)
-    compute_transformation(load_pcd("000000"), load_pcd("000300"), threshold, I)
 
-# Exercise B
+    # Exercise A
+    if False:
+        I = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]]
+        threshold = .02
+        compute_transformation(load_pcd("000000"), load_pcd("000005"), threshold, I)
+        compute_transformation(load_pcd("000000"), load_pcd("000300"), threshold, I)
 
-if False:
-    threshold = 0.2
-    T = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0.2, 0, 0, 1]]
-    compute_transformation(load_pcd("000000"), load_pcd("000300"), threshold, T)
+    # Exercise B
 
-# Exercise C
+    if False:
+        threshold = 0.2
+        T = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0.2, 0, 0, 1]]
+        compute_transformation(load_pcd("000000"), load_pcd("000300"), threshold, T)
 
-if False:
-    threshold = 0.2
-    compute_transformation(load_pcd("000000"), load_pcd("000300"), threshold, I,
-                           custom_normal=True)
+    # Exercise C
 
-# Exercise D
-# Extremely slow, couldn't optimize it
-I = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]]
-threshold = 0.2
-
-images = [name.split(".")[0] for name in os.listdir("RGBD/color")]
-
-source = load_pcd(images[0])
-
-for name in images[1:2]:
-    name = name.split(".")[0]
-    target = load_pcd(name)
-    r = compute_transformation(source, target, threshold, I,
-                               showicp=True,
+    if False:
+        threshold = 0.2
+        compute_transformation(load_pcd("000000"), load_pcd("000300"), threshold, I,
                                custom_normal=True)
-    source = source.transform(r.transformation) + target
-    source.voxel_down_sample(voxel_size=0.05)
 
-o3d.visualization.draw_geometries([source,
-                                   o3d.geometry.TriangleMesh().create_coordinate_frame(0.5, [0., 0., 0.])])
+    # Exercise D
+    # Extremely slow, couldn't optimize it
+    I = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]]
+    threshold = 0.2
+
+    images = [name.split(".")[0] for name in os.listdir("RGBD/color")]
+
+    source = load_pcd(images[0])
+
+    for name in images[1:2]:
+        name = name.split(".")[0]
+        target = load_pcd(name)
+        r = compute_transformation(source, target, threshold, I,
+                                   showicp=True,
+                                   custom_normal=True)
+        source = source.transform(r.transformation) + target
+        source.voxel_down_sample(voxel_size=0.05)
+
+    o3d.visualization.draw_geometries([source,
+                                       o3d.geometry.TriangleMesh().create_coordinate_frame(0.5, [0., 0., 0.])])

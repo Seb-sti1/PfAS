@@ -60,29 +60,30 @@ def full_ransac(source: PointCloud, target: PointCloud, show=False, checkers_l=N
     draw_registrations(source_sample, target_sample, ransac_result.transformation, True)
 
 
-# Example (1.1)
+if __name__ == '__main__':
+    # Example (1.1)
 
-source = o3d.io.read_point_cloud("ICP/r1.pcd")
-target = o3d.io.read_point_cloud("ICP/r2.pcd")
+    source = o3d.io.read_point_cloud("ICP/r1.pcd")
+    target = o3d.io.read_point_cloud("ICP/r2.pcd")
 
-full_ransac(source, target)
+    full_ransac(source, target)
 
-# Exercise 1 (1.2)
+    # Exercise 1 (1.2)
 
-source = o3d.io.read_point_cloud("ICP/r1.pcd")
-target = o3d.io.read_point_cloud("ICP/r3.pcd")
+    source = o3d.io.read_point_cloud("ICP/r1.pcd")
+    target = o3d.io.read_point_cloud("ICP/r3.pcd")
 
-full_ransac(source, target)
+    full_ransac(source, target)
 
-# Exercise B (1.3)
+    # Exercise B (1.3)
 
-corr_length = 0.9
-voxel_size = 0.05
-distance_threshold = voxel_size * 1.5
-c0 = o3d.pipelines.registration.CorrespondenceCheckerBasedOnEdgeLength(corr_length)
-c1 = o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(distance_threshold)
-c2 = o3d.pipelines.registration.CorrespondenceCheckerBasedOnNormal(0.095)
+    corr_length = 0.9
+    voxel_size = 0.05
+    distance_threshold = voxel_size * 1.5
+    c0 = o3d.pipelines.registration.CorrespondenceCheckerBasedOnEdgeLength(corr_length)
+    c1 = o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(distance_threshold)
+    c2 = o3d.pipelines.registration.CorrespondenceCheckerBasedOnNormal(0.095)
 
-checker_list = [c0, c1, c2]
+    checker_list = [c0, c1, c2]
 
-full_ransac(source, target, checkers_l=checker_list)
+    full_ransac(source, target, checkers_l=checker_list)
