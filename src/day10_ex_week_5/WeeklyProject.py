@@ -113,18 +113,16 @@ if __name__ == "__main__":
     if q == "2.":
         images = [name.split(".")[0] for name in os.listdir("car_challange/rgb")]
         images = sorted(images, key=int)
-        step = 20
+        step = 40
         n = min(step * 40, len(images))
 
-        # prepare
-        # vis = o3d.visualization.Visualizer()
-        # vis.create_window()
+        voxel_size = 0.01
 
         # load first pcd
         source = load_pcd(images[0],
                           "car_challange/rgb/%s.jpg",
                           "car_challange/depth/%s.png")
-        source = source.voxel_down_sample(voxel_size=0.02)
+        source = source.voxel_down_sample(voxel_size=voxel_size)
         compute_normals(source)
 
         progress = tqdm(images[step:n:step])
@@ -135,42 +133,27 @@ if __name__ == "__main__":
             target = load_pcd(name,
                               "car_challange/rgb/%s.jpg",
                               "car_challange/depth/%s.png")
-            target = target.voxel_down_sample(voxel_size=0.02)
+            target = target.voxel_down_sample(voxel_size=voxel_size)
             compute_normals(target)
+            draw_registrations(source, target, recolor=True)
 
             # global match
             r = ransac(source, target)
             source_transformed = source.transform(r.transformation)
             compute_normals(source_transformed)
+            draw_registrations(source_transformed, target, recolor=True)
 
             # local match
             r = icp(source_transformed, target, 0.2)
             source_transformed = source_transformed.transform(r.transformation)
 
             # visualization
-            # source_temp = copy.deepcopy(source_transformed)
-            # source_temp = source_temp.voxel_down_sample(voxel_size=0.05)
-            # source_temp.paint_uniform_color([1, 0.706, 0])
-            # target_temp = copy.deepcopy(target)
-            # target_temp = target_temp.voxel_down_sample(voxel_size=0.05)
-            # target_temp.paint_uniform_color([0, 0.651, 0.929])
-            # if idx == 0:
-            #     vis.add_geometry(source_temp)
-            #     vis.add_geometry(target_temp)
-            # else:
-            #     vis.update_geometry(source_temp)
-            #     vis.update_geometry(target_temp)
-            #     vis.poll_events()
-            #     vis.update_renderer()
             draw_registrations(source_transformed, target, recolor=True)
 
             # merge together
             source = source_transformed.transform(r.transformation) + target
-            source.voxel_down_sample(voxel_size=0.02)
+            source.voxel_down_sample(voxel_size=voxel_size)
             compute_normals(source)
-
-        # vis.run()
-        # vis.destroy_window()
 
         o3d.visualization.draw_geometries([source,
                                            o3d.geometry.TriangleMesh().create_coordinate_frame(0.5, [0., 0., 0.])])
