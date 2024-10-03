@@ -20,9 +20,10 @@ def draw_registrations(source, target, transformation=None, recolor=False):
                                        o3d.geometry.TriangleMesh().create_coordinate_frame(0.5, [0., 0., 0.])])
 
 
-def load_pcd(name, pyplot=False):
-    color_raw = o3d.io.read_image(f"RGBD/color/{name}.jpg")
-    depth_raw = o3d.io.read_image(f"RGBD/depth/{name}.png")
+def load_pcd(name, color_path="RGBD/color/%s.jpg",
+             depth_path="RGBD/depth/%s.png", pyplot=False):
+    color_raw = o3d.io.read_image(color_path % name)
+    depth_raw = o3d.io.read_image(depth_path % name)
 
     rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(
         color_raw,
