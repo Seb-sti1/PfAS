@@ -4,9 +4,6 @@
 
 ```sh
 docker build --tag=sebsti1/pfas . # build image
-# **OR**
-docker pull sebsti1/pfas
-# **THEN**
 docker run -it -p 127.0.0.1:8080:8080 -v ./src:/root/src --rm sebsti1/pfas /bin/bash # start image
 ```
 
